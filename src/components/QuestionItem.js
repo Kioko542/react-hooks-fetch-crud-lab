@@ -1,9 +1,12 @@
 import React from "react";
 
-function QuestionItem({ question }) {
+function QuestionItem({ question, onDelete }) {
   const { id, prompt, answers, correctIndex } = question;
 
-  // Check if 'answers' is defined before mapping over it
+  const handleDelete = () => {
+    onDelete(id); // Call the onDelete function with the question id as a parameter
+  };
+
   const options = answers ? (
     answers.map((answer, index) => (
       <option key={index} value={index}>
@@ -20,7 +23,7 @@ function QuestionItem({ question }) {
         Correct Answer:
         <select defaultValue={correctIndex}>{options}</select>
       </label>
-      <button>Delete Question</button>
+      <button onClick={handleDelete}>Delete Question</button>
     </li>
   );
 }
