@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import QuestionItem from "./QuestionItem";
 
 function QuestionList() {
   const [questions, setQuestions] = useState([]);
@@ -21,7 +22,7 @@ function QuestionList() {
      
       <ul>
         {questions.map((question) => (
-          <li key={question.id}>{question.prompt}</li>
+          <QuestionItem key={question.id} question={question} />
         ))}
       </ul>
     </div>

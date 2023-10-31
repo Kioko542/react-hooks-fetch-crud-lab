@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 
 function QuestionForm(props) {
-  const [loading, setLoading] = useState(true);
-
   const [formData, setFormData] = useState({
     prompt: "",
     answer1: "",
@@ -21,22 +19,34 @@ function QuestionForm(props) {
 
   function handleSubmit(event) {
     event.preventDefault();
-    console.log(formData);
-      fetch("http://localhost:4000/questions", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({formData}), 
-      })
+
+    fetch('http://localhost:4000/questions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        prompt: formData.prompt,
+        answers: [formData.answer1, formData.answer2, formData.answer3, formData.answer4],
+        correctIndex: parseInt(formData.correctIndex),
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
        
-        .catch((error) => console.error("Error creating question: ", error));
+        props.addQuestion(data);
+      })
+      .catch((error) => console.error('Error creating a question:', error));
+
     
-  
-    if (loading) {
-      
-      return <div>Loading questions...</div>;
-    }
+    setFormData({
+      prompt: "",
+      answer1: "",
+      answer2: "",
+      answer3: "",
+      answer4: "",
+      correctIndex: 0,
+    });
   }
 
   return (
@@ -95,16 +105,19 @@ function QuestionForm(props) {
             value={formData.correctIndex}
             onChange={handleChange}
           >
-            <option value="0">{formData.answer1}</option>
-            <option value="1">{formData.answer2}</option>
-            <option value="2">{formData.answer3}</option>
-            <option value="3">{formData.answer4}</option>
+            <option value="0">Answer 1</option>
+            <option value="1">Answer 2</option>
+            <option value="2">Answer 3</option>
+            <option value="3">Answer 4</option>
           </select>
         </label>
-        <button type="submit"  >Add Question</button>
+        <button type="submit">Add Question</button>
       </form>
     </section>
   );
 }
 
 export default QuestionForm;
+
+
+	
