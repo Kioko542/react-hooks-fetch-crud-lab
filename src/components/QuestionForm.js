@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 
 function QuestionForm(props) {
+  const [loading, setLoading] = useState(true);
+
   const [formData, setFormData] = useState({
     prompt: "",
     answer1: "",
@@ -20,6 +22,21 @@ function QuestionForm(props) {
   function handleSubmit(event) {
     event.preventDefault();
     console.log(formData);
+      fetch("http://localhost:4000/questions", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({formData}), 
+      })
+       
+        .catch((error) => console.error("Error creating question: ", error));
+    
+  
+    if (loading) {
+      
+      return <div>Loading questions...</div>;
+    }
   }
 
   return (
@@ -84,7 +101,7 @@ function QuestionForm(props) {
             <option value="3">{formData.answer4}</option>
           </select>
         </label>
-        <button type="submit">Add Question</button>
+        <button type="submit"  >Add Question</button>
       </form>
     </section>
   );
